@@ -1,70 +1,43 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { SafeAreaView, Dimensions,View } from "react-native";
+import Top from "../components/Home/Top";
+import React, { useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import SlideView from "../components/common/SlideView";
+import Novel from "../components/Home/Novel";
+import Comic from "../components/Home/Comic";
+import WallPaper from "../components/Home/WallPaper";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+// 当前设备屏幕宽度
+const winWidth = Dimensions.get("window").width;
+// 顶部tab栏选项卡
+const tabBarList = ["小说", "漫画", "壁纸"];
 
-export default function HomeScreen() {
+// Home首页
+const index = () => {
+  const [activeTab, setActiveTab] = useState(0);
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View className="flex-1">
+      {/* 顶部搜索区域 */}
+      <Top
+        tabBarList={tabBarList}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+      {/* 滑动tab区 */}
+      <SlideView
+        width={winWidth * tabBarList.length}
+        pages={tabBarList.length}
+        activeTab={activeTab}
+      >
+        {/* 小说页面 */}
+        <Novel />
+        {/* 漫画页面 */}
+        <Comic />
+        {/* 壁纸页面 */}
+        <WallPaper />
+      </SlideView>
+    </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+export default index;

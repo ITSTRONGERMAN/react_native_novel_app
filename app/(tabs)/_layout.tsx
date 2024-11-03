@@ -1,37 +1,45 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import { Ionicons as Icon } from "@expo/vector-icons";
+import { Text } from "react-native";
+import props from "../../props/tabbar";
+import React from "react";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const _layout = () => {
+  const selectedColor = "#000";
+  const defaultColor = "gray";
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
+        tabBarStyle: {
+          backgroundColor: "#FAFAFA",
+        },
+      }}
+    >
+      {props.map((item, index) => {
+        return (
+          <Tabs.Screen
+            key={index}
+            name={item.name}
+            options={{
+              title: item.title,
+              headerShown: false,
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  name={item.icon}
+                  size={20}
+                  color={focused ? selectedColor : defaultColor}
+                />
+              ),
+              tabBarLabel: ({ focused }) => (
+                <Text style={{ color: focused ? selectedColor : defaultColor }}>
+                  {item.title}
+                </Text>
+              ),
+            }}
+          />
+        );
+      })}
     </Tabs>
   );
-}
+};
+export default _layout;
